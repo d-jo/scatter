@@ -1,0 +1,14 @@
+{
+	"name": "test",
+	"size": 517,
+	"fragments": [{
+		"source_type": "web_get",
+		"source": "https://news.ycombinator.com/news",
+		"size": 500,
+		"datas": [
+			{"type": "index", "start": "100", "end": "350", "size": 250},
+			{"type": "index", "start": "500", "end": "750", "size": 250},
+			{"type": "keys", "start": "super", "end": " above 260 K", "size": 17}
+		]
+	}]
+}
