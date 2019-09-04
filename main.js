@@ -83,14 +83,18 @@ const loadManifestFile = async (name) => {
 
 const decode = async (mf) => {
 	return new Promise((resolve, reject) => {
-		let sections = []
+		let sections = {}
 		let index = 0
 		let retrieved = 0
 		// for each fragment
 		mf["fragments"].forEach((fr) => {
 			// get retrival method and call it
 			let retr = procurements[fr["source_type"]]
+			console.log("Source      \t" + fr["source"])
 			console.log("Source type \t" + fr["source_type"])
+			console.log("Source size \t" + fr["size"])
+			console.log("==========")
+			console.log("Section\tActual\tExpected")
 			retr(fr).then(raw_data => {
 				// go through the raw data from the fragmnet
 				// and parse the different data sections
@@ -99,9 +103,9 @@ const decode = async (mf) => {
 					let transformation = transforms[datas_entry["type"]]
 					// apply the transformation
 					transformation(raw_data, datas_entry).then(section => {
-						sections.push(section)
+						sections[datas_entry["order"]] = section
 						retrieved += section.length
-						console.log(section)
+						console.log(datas_entry["order"] + "\t" + section.length + "\t" + datas_entry["size"])
 						if (retrieved >= mf["size"]) {
 							resolve(sections)
 						}
@@ -113,7 +117,7 @@ const decode = async (mf) => {
 						for(let i = 0; i < datas_entry["size"]; i++) {
 							str += "0"
 						}
-						sections.push(str)
+						sections[datas_entry["order"]] = str
 						retrieved += datas_entry["size"]
 					})
 				})
@@ -125,7 +129,7 @@ const decode = async (mf) => {
 				for(let i = 0; i < datas_entry["size"]; i++) {
 					str += "0"
 				}
-				sections.push(str)
+				sections[datas_entry["order"]] = str
 				retrieved += datas_entry["size"]
 			})
 		})
