@@ -64,21 +64,17 @@ const raw_decode = async (data) => {
 	})
 }
 
-function displayManifest(manifest) {
+function displayJSON(manifest) {
 	console.log(util.inspect(manifest, true, null))
 }
 
-const loadManifestFile = async (name) => {
-	return new Promise((resolve, reject) => {
-		let file
-		fs.readFile(name, "utf8", (err, contents) => {
-			if (err) {
-				reject(err)
-			} else {
-				resolve(JSON.parse(contents))
-			}
-		})
-	})
+function loadFile(name) {
+	try {
+		let contents = fs.readFileSync(name, "utf8")
+		return [JSON.parse(contents), null]
+	} catch (err) {
+		return [null, err]
+	}
 }
 
 const decode = async (mf) => {
@@ -86,6 +82,7 @@ const decode = async (mf) => {
 		let sections = {}
 		let index = 0
 		let retrieved = 0
+		let header = false
 		// for each fragment
 		mf["fragments"].forEach((fr) => {
 			// get retrival method and call it
@@ -94,10 +91,14 @@ const decode = async (mf) => {
 			console.log("Source type \t" + fr["source_type"])
 			console.log("Source size \t" + fr["size"])
 			console.log("==========")
-			console.log("Section\tActual\tExpected")
+
 			retr(fr).then(raw_data => {
 				// go through the raw data from the fragmnet
 				// and parse the different data sections
+				if (!header) {
+					console.log("Section\tSource\t\tSourceType\tActual\tExpected")
+					header = true
+				}
 				fr["datas"].forEach(datas_entry => {
 					// get the transformation
 					let transformation = transforms[datas_entry["type"]]
@@ -105,7 +106,7 @@ const decode = async (mf) => {
 					transformation(raw_data, datas_entry).then(section => {
 						sections[datas_entry["order"]] = section
 						retrieved += section.length
-						console.log(datas_entry["order"] + "\t" + section.length + "\t" + datas_entry["size"])
+						console.log(datas_entry["order"] + "\t" + fr["source"].substring(12, 24) + "\t" + fr["source_type"] + "\t\t" + section.length + "\t" + datas_entry["size"])
 						if (retrieved >= mf["size"]) {
 							resolve(sections)
 						}
@@ -139,6 +140,7 @@ const decode = async (mf) => {
 
 var argv = minimist(process.argv.slice(2))
 var manifest_file
+var credential_file
 
 var procurements = {
 	"web_get": webget,
@@ -157,28 +159,45 @@ var decoding = {
 	raw: raw_decode,
 }
 
+var encoding
+
+
+let f
 if (argv["manifest"]) {
-	loadManifestFile(argv["manifest"]).then(file => {
-		manifest_file = file	
-		displayManifest(manifest_file)
-		postStart()
-	}).catch(err => {
-		console.log(err)
-	})
+	// load argv manifest
+	f = loadFile(argv["manifest"])
 } else {
-	loadManifestFile("manifest.json").then(file => {
-		manifest_file = file	
-		displayManifest(manifest_file)
-		postStart()
-	}).catch(err => {
-		console.log(err)
-	})
+	// load default
+	console.log("Default manifest file")
+	f = loadFile("manifest.json")
 }
 
-function postStart() {
-	if (argv["decode"] || argv["d"]) { 
-		startDecode()
-	}
+if (f[1] == null) {
+	// good, error is null
+	manifest_file = f[0]
+	console.log("Loaded manifest")
+	displayJSON(manifest_file)
+} else {
+	// error
+	console.log("Error loading manifest file: " + f[1].message)
+}
+
+let c
+if (argv["creds"]) {
+	c = loadFile(argv["creds"])
+} else {
+	c = loadFile("creds.json")
+}
+
+if (c[1] == null) {
+	credential_file = c[0]
+	console.log("Loaded credentials")
+} else {
+	console.log("Error loading credential file: " + c[1].message)
+}
+
+if (argv["decode"] || argv["d"]) { 
+	startDecode()
 }
 
 function startDecode() {
@@ -191,9 +210,5 @@ function startDecode() {
 		console.log(err.message)
 	})
 }
-
-
-
-
 
 
