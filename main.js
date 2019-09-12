@@ -1,27 +1,24 @@
-
 const minimist = require("minimist")
 const util = require("util")
 const io = require("./io.js")
 const decoder = require("./decoding.js")
 
 function displayJSON(manifest) {
-	console.log(util.inspect(manifest, true, null))
+	console.log(util.inspect(manifest, true, null));
 }
 
+const argv = minimist(process.argv.slice(2));
+let manifest_file;
+let credential_file;
 
-var argv = minimist(process.argv.slice(2))
-var manifest_file
-var credential_file
-
-
-let f
+let f;
 if (argv["manifest"]) {
 	// load argv manifest
-	f = io.LoadFile(argv["manifest"])
+	f = io.loadFile(argv["manifest"]);
 } else {
 	// load default
-	console.log("Default manifest file")
-	f = io.LoadFile("manifest.json")
+	console.log("Default manifest file");
+	f = io.loadFile("manifest.json");
 }
 
 if (f[1] == null) {
@@ -34,33 +31,31 @@ if (f[1] == null) {
 	console.log("Error loading manifest file: " + f[1].message)
 }
 
-let c
+let c;
 if (argv["creds"]) {
-	c = io.LoadFile(argv["creds"])
+	c = io.loadFile(argv["creds"]);
 } else {
-	c = io.LoadFile("creds.json")
+	c = io.loadFile("creds.json");
 }
 
 if (c[1] == null) {
-	credential_file = c[0]
-	console.log("Loaded credentials")
+	credential_file = c[0];
+	console.log("Loaded credentials");
 } else {
-	console.log("Error loading credential file: " + c[1].message)
+	console.log("Error loading credential file: " + c[1].message);
 }
 
-if (argv["decode"] || argv["d"]) { 
-	startDecode()
+if (argv["decode"] || argv["d"]) {
+	startDecode();
 }
 
 function startDecode() {
-	console.log("Decoding")
-	decoder.Decode(manifest_file).then(sect => {
-		console.log(sect)
-		console.log(sect[0].length)
-		console.log(sect[1].length)
+	console.log("Decoding");
+	decoder.decode(manifest_file).then(sect => {
+		console.log(sect);
+		console.log(sect[0].length);
+		console.log(sect[1].length);
 	}).catch(err => {
-		console.log(err.message)
-	})
+		console.log(err.message);
+	});
 }
-
-
