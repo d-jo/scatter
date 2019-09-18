@@ -6,10 +6,9 @@ Scatter uses manifest files to point to fragmented data across the web or in a l
 
 It's normal to create a manifest file that constructs a new manifest file when decoded. A layered approach is useful for files that require the fragment locations to change often, or have many fragments. Depending on the content, a layered message produces a smaller manifest file for distribution.
 
-Some fun ideas for data: steganography,  
 
 ```
-======== 			File
+========		File
 == == == == 		Fragments
 = = = = = = = = 	Sections
 ```
