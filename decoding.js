@@ -81,7 +81,9 @@ function decode(mf) {
 					let transformation = transforms[datas_entry["type"]];
 					// apply the transformation
 					transformation(raw_data, datas_entry).then(section => {
-						sections[datas_entry["order"]] = section;
+						datas_entry["locations"].forEach(loc => {
+							sections[loc] = section;
+						});
 						retrieved += section.length;
 						console.log(datas_entry["order"] + "\t" + fr["source"].substring(12, 24) + "\t" + fr["source_type"] + "\t\t" + section.length + "\t" + datas_entry["size"]);
 						if (retrieved >= mf["size"]) {

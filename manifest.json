@@ -6,21 +6,21 @@
 		"source": "https://www.youtube.com/watch?v=VYOjWnS4cMY",
 		"size": 7,
 		"datas": [
-			{"type": "keys", "start": "This", "end": " America", "size": 7, "order": 0}
+			{"type": "keys", "start": "This", "end": " America", "size": 7, "locations": [0]}
 		]
 	}, {
 		"source_type": "web_get",
 		"source": "https://www.wowhead.com/quest=32474/a-test-of-valor",
 		"size": 9,
 		"datas": [
-			{"type": "keys", "start": "A Tes", "end": " Valor", "size": 9, "order": 1}
+			{"type": "keys", "start": "A Tes", "end": " Valor", "size": 9, "locations": [1]}
 		]
 	}, {
 		"source_type": "web_get",
 		"source": "https://www.xlstat.com/en/solutions/features/scatter-plots",
 		"size": 7,
 		"datas": [
-			{"type": "keys", "start": "Scatter", "end": " plot", "size": 7, "order": 2}
+			{"type": "keys", "start": "Scatter", "end": " plot", "size": 7, "locations": [2]}
 		]
 	}]
 }
