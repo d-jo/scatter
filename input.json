@@ -1,8 +1,33 @@
 {
-	"message_data": "This is a new test of my wonderful application",
-	"l1_separator": " ",
-	"l2_separator": "",
-	"encoding_type": "trie",
-	"web_index": [],
-	"file_index": []
+	"fragmenter": {
+		"type": "bilevel-split",
+		"l1": " ",
+		"l2": ""
+	},
+	"encoder":{
+	   	"type": "trie"
+	},
+	"data-locations": {
+		"default-fragmenter": {
+			"type": "split",
+			"l1": ""
+		},
+		"input": {
+			"type": "file",
+			"location": "inputfile.txt"
+		},
+		"web_index": [{
+			"type": "get",
+			"location": "aaa.examle.gome",
+			"preprocess": {
+				"regex-replace": {
+					"\s*[0-9]\s\s*": ""
+				}
+			}
+		}],
+		"file_index": [{
+			"location": "",
+			"proprocess": {}
+		}]
+	}
 }
