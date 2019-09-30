@@ -7,27 +7,8 @@
 	"encoder":{
 	   	"type": "trie"
 	},
-	"data-locations": {
-		"default-fragmenter": {
-			"type": "split",
-			"l1": ""
-		},
-		"input": {
-			"type": "file",
-			"location": "inputfile.txt"
-		},
-		"web_index": [{
-			"type": "get",
-			"location": "aaa.examle.gome",
-			"preprocess": {
-				"regex-replace": {
-					"\s*[0-9]\s\s*": ""
-				}
-			}
-		}],
-		"file_index": [{
-			"location": "",
-			"proprocess": {}
-		}]
-	}
+	"index": [{
+		"type": "file",
+		"location": "data"
+	}]
 }

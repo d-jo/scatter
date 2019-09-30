@@ -1,0 +1,21 @@
+{
+	"fragmenter": {
+		"type": "bilevel-split|constant|custom...",
+		"option1": "value1",
+		"option2": "value2..."
+	},
+	"encoder":{
+	   	"type": "trie|custom..."
+	},
+	"data-locations": {
+		"index": [{
+			"type": "http-get*|file*|ftp*|...",
+			"location": "aaa.examle.com|input",
+			"preprocesser": {
+				"regex-replace": {
+					"\s*[0-9]\s\s*": ""
+				}
+			}
+		}]
+	}
+}

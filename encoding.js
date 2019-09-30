@@ -30,7 +30,7 @@ function CreateSearchObject(inputFile) {
 			}
 
 			let sections = item.split(inputFile["l2_separator"]);
-			searchObject["trie"] = recursiveTreeBuild(searchObject["trie"], sections, 0);
+			trie.AddToTrie(searchObject["trie"], sections);
 		});
 		resolve(searchObject);
 	});
