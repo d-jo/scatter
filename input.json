@@ -1,4 +1,5 @@
 {
+	"message_data": "this is a test of the trie encoding system used by scatter i have not implemented manifest construction yet",
 	"fragmenter": {
 		"type": "bilevel-split",
 		"l1": " ",

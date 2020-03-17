@@ -2,24 +2,25 @@ const trie = require("./trie.js");
 
 function CreateDenseSearchTermFromString(input) {
 	let words = [input];
-	for (let i = 1; i < input.length; i++) {
-		for (let l = 1; l <= input.length - i; l++) {
-			let str = [];
-			for (let k = 0; k < l; k++) {
-				str.push(input[i + k]);
-			}
-			words.push(str.join(""));
+	let buf = input.split("");
+	for (let i = 1; i < buf.length; i++) {
+		let tmp = []
+		for (let j = i; j < buf.length; j++) {
+			tmp.push(buf[j]);
 		}
+		words.push(tmp.join(""));
 	}
 	return words;
 }
 
 function CreateSearchObject(inputFile) {
 	return new Promise((resolve, reject) => {
-		let searchObject = {"trie": new Trie(), "coverage": {}, "locations": {}};
-		let fragments = inputFile["message_data"].split(inputFile["l1_separator"]);
+		let searchObject = {"trie": new trie.Trie(), "coverage": {}, "locations": {}};
+		let fragments = inputFile["message_data"].split(inputFile["fragmenter"]["l1"]);
+		console.log(fragments);
 		let loc = 0;
 		fragments.forEach(item => {
+			console.log(item);
 			if (!searchObject["locations"][item]) {
 				searchObject["locations"][item] = [];
 			}
@@ -29,8 +30,11 @@ function CreateSearchObject(inputFile) {
 				searchObject["coverage"][item] = 0;
 			}
 
-			let sections = item.split(inputFile["l2_separator"]);
-			trie.AddToTrie(searchObject["trie"], sections);
+			let dense = CreateDenseSearchTermFromString(item);
+			console.log(dense);
+			dense.forEach(d => {
+				trie.AddToTrie(searchObject["trie"], d); 
+			});
 		});
 		resolve(searchObject);
 	});
@@ -38,7 +42,7 @@ function CreateSearchObject(inputFile) {
 
 function Encode(inputFile) {
 	return new Promise((resolve, reject) => {
-		createSearchObject(inputFile).then((so) => {
+		CreateSearchObject(inputFile).then((so) => {
 			resolve(so)
 		}).catch(err => {
 			console.log("Error creating search file!")
@@ -50,6 +54,6 @@ function Encode(inputFile) {
 
 module.exports = {
 	Encode,
-	CreateDenseSearchTerm,
 	CreateSearchObject,
+	CreateDenseSearchTermFromString,
 }

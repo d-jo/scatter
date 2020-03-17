@@ -1,8 +1,9 @@
-const minimist = require("minimist")
-const util = require("util")
-const io = require("./io.js")
-const decoder = require("./decoding.js")
-const encoder = require("./encoding.js")
+const minimist = require("minimist");
+const util = require("util");
+const io = require("./io.js");
+const decoder = require("./decoding.js");
+const encoder = require("./encoding.js");
+const trie = require("./trie.js");
 
 function displayJSON(manifest) {
 	console.log(util.inspect(manifest, true, null));
@@ -86,8 +87,9 @@ function startDecode() {
 
 function startEncode() {
 	console.log("Encoding")
-	encoder.encode(input_file).then(res => {
-		displayJSON(res)	;
+	encoder.Encode(input_file).then(res => {
+		//displayJSON(res);
+		trie.PrintTrie(res["trie"]._root, 0);
 	}).catch(err => {
 		console.log(err.stack);
 	});
