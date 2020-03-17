@@ -4,7 +4,7 @@
   "description": "Fragmented Files",
   "main": "main.js",
   "dependencies": {
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.2"
   },
   "devDependencies": {},
   "scripts": {
